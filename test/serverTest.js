@@ -1,10 +1,28 @@
 var chai = require('chai');
 var chaihttp = require('chai-http');
 var expect = chai.expect;
+var mongoose = require('mongoose');
 var server = require('../server');
+var Restaurant = require('../models/restaurant');
+
 chai.use(chaihttp);
 
 describe('restaurant REST server', function() {
+  var testSave;
+  var id;
+  beforeEach(function(done) {
+    testSave = new Restaurant({ name: 'Testing house',
+                                    rating: 0,
+                                    cuisine: 'Testing',
+                                    location: 'Testland',
+                                  });
+    testSave.save(function(err, data) {
+      if(err) throw err;
+
+      testSave = data;
+      done();
+    });
+  });
   it('should return a list of restaurants from the server with a generic GET request', function(done) {
     chai.request('localhost:3000')
       .get('/api/restaurants')
@@ -16,8 +34,9 @@ describe('restaurant REST server', function() {
       });
   });
   it('should return a specific restaurant from the server', function(done) {
+    id = testSave._id;
     chai.request('localhost:3000')
-      .get('/api/restaurants/:id')
+      .get('/api/restaurants/' + id)
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.status).to.eql(200);
@@ -27,8 +46,12 @@ describe('restaurant REST server', function() {
   });
   it('should have the ability to save a restaurant', function(done) {
     chai.request('localhost:3000')
-      .post('/api/restaurants/:id')
-      .send({msg: "testing"})
+      .post('/api/restaurants')
+      .send({name: 'Crab House',
+             rating: 5,
+             cuisine: 'Seafood',
+             location: 'Pikes Place',
+            })
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.status).to.eql(200);;
@@ -37,9 +60,10 @@ describe('restaurant REST server', function() {
       });
   });
   it('should have the ability to update a restaurant', function(done) {
+    id = testSave._id
     chai.request('localhost:3000')
-      .put('/api/restaurants/:id')
-      .send({field: "updated"})
+      .put('/api/restaurants/' + id)
+      .send({name: 'Ivars', rating: '4'})
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.status).to.eql(200);;
@@ -48,8 +72,9 @@ describe('restaurant REST server', function() {
       });
   });
   it('should have the ability to delete a restaurant', function(done) {
+    id = testSave._id;
     chai.request('localhost:3000')
-      .del('/api/restaurants/:id')
+      .del('/api/restaurants/' +id)
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.status).to.eql(200);;
@@ -57,6 +82,5 @@ describe('restaurant REST server', function() {
         done();
       });
   });
-
 });
 
