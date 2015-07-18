@@ -10,11 +10,11 @@ gulp.task('test', function() {
 });
 
 gulp.task('lint', function() {
-  return gulp.src(['test/*js', '*.js'])
+  return gulp.src(['*js', 'routes/*js', 'models/*js'])
              .pipe(jshint())
              .pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('watch', function() {
-  return gulp.watch(['test/*js', '*.js'], ['test', 'lint']);
+  return gulp.watch(['*js', 'routes/*js', 'models/*js'], ['test', 'lint']);
 });

@@ -4,6 +4,8 @@ var app = express();
 
 var restaurantRoutes = express.Router();
 
+mongoose.connect('mongodb://localhost/restaurants_db');
+
 require('./routes/restaurantRoutes')(restaurantRoutes);
 
 app.use('/api', restaurantRoutes);
