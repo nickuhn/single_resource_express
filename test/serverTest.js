@@ -1,7 +1,7 @@
 var chai = require('chai');
 var chaihttp = require('chai-http');
 var expect = chai.expect;
-process.env.MONGOLAB_URI = 'mongodb://localhost/restTest_db';
+process.env.MONGOLAB_URL = 'mongodb://localhost/restTest_db';
 var mongoose = require('mongoose');
 var server = require('../server');
 var Restaurant = require('../models/restaurant');
