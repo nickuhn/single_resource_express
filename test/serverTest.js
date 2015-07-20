@@ -1,11 +1,13 @@
 var chai = require('chai');
 var chaihttp = require('chai-http');
 var expect = chai.expect;
+process.env.MONGOLAB_URI = 'mongodb://localhost/restTest_db';
 var mongoose = require('mongoose');
 var server = require('../server');
 var Restaurant = require('../models/restaurant');
 
 chai.use(chaihttp);
+
 
 describe('restaurant REST server', function() {
   var testSave;
@@ -81,6 +83,11 @@ describe('restaurant REST server', function() {
         expect(res).to.be.json;
         done();
       });
+  });
+  after(function(done) {
+    mongoose.connection.db.dropDatabase(function() {
+      done();
+    });
   });
 });
 

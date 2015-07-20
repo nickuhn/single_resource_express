@@ -4,7 +4,9 @@ var app = express();
 
 var restaurantRoutes = express.Router();
 
-mongoose.connect('mongodb://localhost/restaurants_db');
+var MONGO_URI = (process.env.MONGOLAB_URI || 'mongodb://localhost/restaurants_db');
+
+mongoose.connect(MONGO_URI);
 
 require('./routes/restaurantRoutes')(restaurantRoutes);
 
