@@ -1,5 +1,5 @@
 var bodyParser = require('body-parser');
-var Restaurant = require('../models/restaurant');
+var Restaurant = require(__dirname + '/../models/restaurant');
 
 module.exports = function(router) {
 
